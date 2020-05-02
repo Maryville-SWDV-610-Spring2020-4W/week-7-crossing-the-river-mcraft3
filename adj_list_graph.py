@@ -1,44 +1,20 @@
 # adj_list_graph.py
 
 # ------------------------------------------------
-"""
-Adjacency Matrix Graph for dense graphs.
-Adjacency List Graph for sparse graphs.
+"""Provides a class for Graph using an Adjacency
+List Graph, and a class for Vertex. 
 
-Adjacency List keeps a master list of all vertices
-in the Graph object. Each Vertex object in the
-graph maintains a list of the other vertices it is
-connected to, using a Python dictionary. The keys
-are the vertices, and values are the weights.
+Adjacency List keeps a dictionary (self.vertList)
+of all vertices in the Graph object.
 
-The graph abstract data type (ADT) is defined as
-follows:
+Each Vertex object in the graph maintains a
+dictonary (self.connectedTo) of the other vertices
+or neighbors it is connected to.
 
-Graph() creates a new, empty graph.
-
-addVertex(vert) adds an instance of Vertex to the
-graph.
-
-addEdge(fromVert, toVert) Adds a new, directed
-edge to the graph that connects two vertices.
-
-addEdge(fromVert, toVert, weight) Adds a new,
-weighted, directed edge to the graph that connects
-two vertices.
-
-getVertex(vertKey) finds the vertex in the graph
-named vertKey.
-
-getVertices() returns the list of all vertices in
-the graph.
-
-in returns True for a statement of the form vertex
-in graph, if the given vertex is in the graph,
-False otherwise.
-
-"""
+Vertex class supports use of distance,
+predecessors, discovery and finish."""
 # ------------------------------------------------
-import sys
+import sys # used by Vertex to set maxsize
 
 # ------------------------------------------------
 class Graph:
@@ -47,7 +23,6 @@ class Graph:
     def __init__(self):
         # dictionary that maps vertex names to
         # vertex objects; initialize
-        # self.vertices = {}                    # remove
         self.vertList = {}
         self.numVertices = 0
     #--------class accessors----------------------
@@ -55,13 +30,10 @@ class Graph:
         return self.numVertices
     
     def __contains__(self,n):
-        # return n in self.vertices             # remove
         return n in self.vertList
     
     def getVertex(self,n):
-        # if n in self.vertices:                # remove
         if n in self.vertList:
-            # return self.vertices[n]           # remove
             return self.vertList[n]
         else:
             return None        
@@ -71,13 +43,11 @@ class Graph:
     # over vertices in graph by name, or by the
     # objects themselves.
     def getVertices(self):
-        # return list(self.vertices.keys())     # remove       
         return list(self.vertList.keys())
     
     # makes it easy to iterate over all vertex
     # objects in graph
     def __iter__(self):
-        # return iter(self.vertices.values())   # remove
         return iter(self.vertList.values())
                 
     #--------class methods------------------------
@@ -87,20 +57,15 @@ class Graph:
         self.numVertices = self.numVertices + 1
         newVertex = Vertex(key)
         
-        # self.vertices[key] = newVertex        # remove
         # list of vertices
         self.vertList[key] = newVertex 
         return newVertex
     
-    # def addEdge(self,f,t,cost=0):             # remove
     def addEdge(self,f,t,weight=0):
-        # if f not in self.vertices:            # remove
         if f not in self.vertList:
             nv = self.addVertex(f)
-        # if t not in self.vertices:            # remove
         if t not in self.vertList:
             nv = self.addVertex(t)
-        # self.vertice[f].addNeighbor(self.vertices[t],cost) # remove
         self.vertList[f].addNeighbor(self.vertList[t],weight)
 
 # ------------------------------------------------    
@@ -114,7 +79,7 @@ class Vertex:
         self.id = key # initialize id with key
         
         # dictionary to track vertex is connectedTo 
-        # what vertices, and weight of each edge
+        # what vertices
         self.connectedTo = {} # initialize dictionary
         self.color = 'white'    # color
         self.dist = sys.maxsize # distance
@@ -159,9 +124,8 @@ class Vertex:
         return self.connectedTo[nbr]
                 
     def __str__(self):
-        # return str(self.id) + ":color " + self.color + ":disc " + str(self.disc) + ":fin " + str(self.fin) + ":dist " + str(self.dist) + ":pred \n\t[" + str(self.pred)+ "]\n"
-        return str(self.id) + ' connectedTo: ' + str([x.id for x in self.connectedTo])
-       
+        return str(self.id) + ' connectedTo: ' + str([x.id for x in self.connectedTo]) 
+        
     #--------class methods------------------------
     # add a connection from this vertex to another
     def addNeighbor(self,nbr,weight=0):
